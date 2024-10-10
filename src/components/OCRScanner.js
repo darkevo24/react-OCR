@@ -10,7 +10,12 @@ const OCRScanner = () => {
   // Start the camera when the component mounts
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const constraints = {
+        video: {
+          facingMode: { exact: 'environment' }, // Use the back camera
+        },
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       videoRef.current.srcObject = stream;
     } catch (error) {
       console.error('Error accessing the camera:', error);
