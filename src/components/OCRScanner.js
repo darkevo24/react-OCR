@@ -44,26 +44,23 @@ const OCRScanner = () => {
 
     if (imageData) {
       const worker = Tesseract.createWorker();
-      try {
-        await worker.load();
-        await worker.loadLanguage('eng');
-        await worker.initialize('eng');
 
-        const {
-          data: { text },
-        } = await worker.recognize(imageData);
-        setOcrResult({ text });
-      } catch (error) {
-        console.error('OCR processing error:', error);
-        alert('An error occurred during OCR processing.');
-      } finally {
-        await worker.terminate();
-        setLoading(false);
-      }
+      // Load the worker, language, and perform OCR
+      await worker.load();
+      await worker.loadLanguage('eng');
+      await worker.initialize('eng');
+
+      const {
+        data: { text },
+      } = await worker.recognize(imageData);
+      setOcrResult({ text });
+
+      await worker.terminate(); // Terminate the worker
     } else {
-      setLoading(false);
       alert('Failed to capture image. Please try again.');
     }
+
+    setLoading(false); // Set loading to false regardless of the image capture result
   };
 
   // Initialize the camera when the component mounts
